@@ -104,6 +104,6 @@ class ConnectorSnippet(models.TransientModel):
                     status = True
         return {
             'status' : status,
-            'error' : str(e)
+            'error' : error
             }
 
