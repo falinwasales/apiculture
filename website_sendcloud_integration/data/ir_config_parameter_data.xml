@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<odoo noupdate="1">
+    <record id="google_maps_api_key" model="ir.config_parameter">
+        <field name="key">google_maps_api_key</field>
+        <field name="value">AIzaSyChTVkGmjDTjU_1swJzexB6MX6j8sBAezI</field>
+    </record>
+</odoo>

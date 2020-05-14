@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sendcloud_deleivery_method_configuration" model="ir.ui.view">
+        <field name="name">delivery.carrier.configuration</field>
+        <field name="model">delivery.carrier</field>
+        <field name="inherit_id" ref="delivery.view_delivery_carrier_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='integration_level']" position="after">
+                <field name="delivery_type_sendcloud" widget="radio"
+                       attrs="{'invisible': [('delivery_type', '!=', 'sendcloud')], 'required': [('delivery_type', '==', 'sendcloud')]}"/>
+            </xpath>
+            <xpath expr="//page[1]" position="before">
+                <page string="Pricing"
+                      attrs="{'invisible': [('delivery_type', 'not in', ['sendcloud'])]}">
+                    <group
+                            attrs="{'invisible':['|',('delivery_type', '==', 'base_on_rule'),('delivery_type_sendcloud', '==', 'base_on_rule')]}">
+                        <group>
+                            <field name="fixed_price"/>
+                        </group>
+                    </group>
+                    <group name="general"
+                           attrs="{'invisible':['|',('delivery_type', '==', 'fixed'),('delivery_type_sendcloud', '==', 'fixed')]}">
+                        <field name="price_rule_ids" nolabel="1"/>
+                    </group>
+                </page>
+            </xpath>
+
+            
+            <xpath expr="//page[@name='destination']" position='before'>
+                <page string="Sendcloud Configuration" name="sendcloud_configuration"
+                      attrs="{'invisible': [('delivery_type', '!=', 'sendcloud')]}">
+                    <group>
+                        <group>
+                            <field name="sendcloud_service_id" attrs="{'required': [('delivery_type', '=', 'sendcloud')]}"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
