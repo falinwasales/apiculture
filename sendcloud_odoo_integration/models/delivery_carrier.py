@@ -93,7 +93,7 @@ class DeliveryCarrier(models.Model):
                     picking.sendcloud_external_order_id=response_data.get("parcel").get("external_order_id")
                     picking.sendcloud_external_shipment_id= response_data.get("parcel").get("external_shipment_id")
                     shipping_data = {
-                        'exact_price': float(picking.sale_id and picking.sale_id.delivery_price or 0.0),
+                        'exact_price': 0.0,
                         'tracking_number': response_data.get("parcel").get("tracking_number")}
                     shipping_data = [shipping_data]
                     return shipping_data
