@@ -102,3 +102,7 @@ class DeliveryCarrier(models.Model):
             else:
                 raise ValidationError(
                     _("Response Code : %s Response Data : %s ") % (response_data.status_code, response_data.text))
+
+    def sendcloud_get_tracking_link(self, picking):
+        res = '{0}'.format(picking.sendcloud_tracking_page_url)
+        return res
