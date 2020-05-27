@@ -37,10 +37,10 @@ class DeliveryCarrier(models.Model):
           "parcel": {
             "name":  "%s" % (receipient_address.name),
             "company_name": "%s" % (receipient_address.name),
-            "address":"%s" % (receipient_address.street or ""),
+            "address":"%s" % (picking.sale_id.sendcloud_shipping_location_id.street if picking.sale_id.sendcloud_shipping_location_id.street else receipient_address.street or ""),
             "house_number": "%s"%(receipient_address.street2),
-            "city": "%s"% (receipient_address.city or ""),
-            "postal_code": "%s" % (receipient_address.zip or ""),
+            "city": "%s"% (picking.sale_id.sendcloud_shipping_location_id.city if picking.sale_id.sendcloud_shipping_location_id.city else receipient_address.city or ""),
+            "postal_code": "%s" % (picking.sale_id.sendcloud_shipping_location_id.zip if picking.sale_id.sendcloud_shipping_location_id.zip else receipient_address.zip or ""),
             "telephone": "%s" % (receipient_address.phone or ""),
             "request_label": True,
             "email": "%s" % (receipient_address.email or ""),
@@ -51,7 +51,8 @@ class DeliveryCarrier(models.Model):
             },
             "weight": "%s"%(picking.shipping_weight),
             "order_number": "%s"%(picking.id),
-            "insured_value": 0.0
+            "insured_value": 0.0,
+            "to_service_point" : picking.sale_id.sendcloud_shipping_location_id.send_cloud_location_id or ""
           }
         }
         return sendcloud_request_data
@@ -102,7 +103,3 @@ class DeliveryCarrier(models.Model):
             else:
                 raise ValidationError(
                     _("Response Code : %s Response Data : %s ") % (response_data.status_code, response_data.text))
-
-    def sendcloud_get_tracking_link(self, picking):
-        res = '{0}'.format(picking.sendcloud_tracking_page_url)
-        return res
