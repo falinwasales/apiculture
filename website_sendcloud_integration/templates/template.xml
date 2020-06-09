@@ -6,6 +6,13 @@
             <input id="sale_order_js" t-if="order" name="sale_order"
                    type="hidden" t-att-value="order.id"/>
         </xpath>
+        <xpath expr="//div[@id='delivery_method']//li" position="inside">
+            <t t-if="delivery and delivery.location_required">
+                <input id="location_required" name="location_required"
+                       t-att-value="delivery.location_required"
+                       type="hidden"/>
+            </t>
+        </xpath>
     </template>
 
     <template id="sendcloud_shipping_location"

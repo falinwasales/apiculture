@@ -11,7 +11,8 @@ class WebsiteSale(http.Controller):
         if post.get('order') and post.get('delivery_type'):
             delivery_method = request.env['delivery.carrier'].sudo().browse(int(post.get('delivery_type')))
             if delivery_method.delivery_type == 'sendcloud':
-                results = request.env['ir.ui.view'].render_template('website_sendcloud_integration.sendcloud_shipping_location')
+                location_required = True
+                results = request.env['ir.ui.view'].render_template('website_sendcloud_integration.sendcloud_shipping_location', {'location_required': location_required})
         return results
 
     @http.route(['/get_location'], type='json', auth='public', methods=['POST'],
