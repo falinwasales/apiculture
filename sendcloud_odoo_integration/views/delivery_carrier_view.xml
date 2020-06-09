@@ -9,12 +9,6 @@
                 <field name="delivery_type_sendcloud" widget="radio"
                        attrs="{'invisible': [('delivery_type', '!=', 'sendcloud')], 'required': [('delivery_type', '==', 'sendcloud')]}"/>
             </xpath>
-            <group name="provider_details" position="after">
-                <group>
-                    <field name="location_required"></field>
-                </group>
-            </group>
-
             <xpath expr="//page[1]" position="before">
                 <page string="Pricing"
                       attrs="{'invisible': [('delivery_type', 'not in', ['sendcloud'])]}">
@@ -39,6 +33,7 @@
                         <group>
                             <field name="sendcloud_service_id"
                                    attrs="{'required': [('delivery_type', '=', 'sendcloud')]}"/>
+                            <field name="location_required"></field>
                         </group>
                     </group>
                 </page>
