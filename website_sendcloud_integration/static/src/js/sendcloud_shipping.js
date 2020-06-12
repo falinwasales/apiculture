@@ -141,10 +141,14 @@ odoo.define('website_sendcloud_integration.checkout', function (require) {
                         if(location_r == 'True' && $('.disp_location').text() == ""){
                             $payButton.prop('disabled', true);
                             $('#loc_warning').remove()
+                            $('.sendcloud_loc_js').css('display','block');
                             $('#location_required').after(msg)
                         }
                         else{
                             $('#loc_warning').remove()
+                            if($('.disp_location').text() == ""){
+                                $('.sendcloud_loc_js').css('display','none');
+                            }
                         }
                         $('#service_table_js').remove();
                         var values = {
