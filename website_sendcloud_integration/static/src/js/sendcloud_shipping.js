@@ -150,79 +150,97 @@ odoo.define('website_sendcloud_integration.checkout', function (require) {
                                 $('.sendcloud_loc_js').css('display','none');
                             }
                         }
-                        $('#service_table_js').remove();
-                        var values = {
-                            'order': order_id,
-                            'delivery_type':delivery_id
-                        };
-                        ajax.jsonRpc('/sendcloud_service', 'call', values).then(function (service) {
-                            if (service && !$('div').hasClass('sendcloud_loc_js'))
-                            {
-                                $('.modal-backdrop').addClass('hidden')
-                                $('#delivery_method').find('#delivery_'+ delivery_id +'').parents('.list-group-item').append(service);
+                        if(location_r == 'True'){
+                            $('#service_table_js').remove();
+                            var values = {
+                                'order': order_id,
+                                'delivery_type':delivery_id
+                            };
+                            ajax.jsonRpc('/sendcloud_service', 'call', values).then(function (service) {
+                                if (service && !$('div').hasClass('sendcloud_loc_js'))
+                                {
+                                    $('.modal-backdrop').addClass('hidden')
+                                    $('#delivery_method').find('#delivery_'+ delivery_id +'').parents('.list-group-item').append(service);
 
-                                /*
-                                 Get location
-                                */
-                                var $get_location = $('button[name="get_location"]');
-                                $get_location.on('click', function () {
-                                    ajax.jsonRpc('/get_location', 'call').then(function (data) {
-                                        if (!data.error && data.dic)
-                                        {
-                                            $('#sendcloudId').find('.modal-body').html('');
-                                            $('#sendcloudId').find('.modal-body').html(data.template);
-                                            setTimeout(function(){
-                                                var locations = data.dic
-                                                var map = new google.maps.Map(document.getElementById('map'), {
-                                                    zoom: 12,
-                                                    center: new google.maps.LatLng(locations[0][1], locations[0][2]),
-                                                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                                                });
-
-                                                var infowindow = new google.maps.InfoWindow();
-                                                var marker, i;
-                                                for (i = 0; i < locations.length; i++) {
-                                                    marker = new google.maps.Marker({
-                                                        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-                                                        map: map
+                                    /*
+                                     Get location
+                                    */
+                                    var $get_location = $('button[name="get_location"]');
+                                    $get_location.on('click', function () {
+                                        ajax.jsonRpc('/get_location', 'call').then(function (data) {
+                                            if (!data.error && data.dic)
+                                            {
+                                                $('#sendcloudId').find('.modal-body').html('');
+                                                $('#sendcloudId').find('.modal-body').html(data.template);
+                                                setTimeout(function(){
+                                                    var locations = data.dic
+                                                    var map = new google.maps.Map(document.getElementById('map'), {
+                                                        zoom: 12,
+                                                        center: new google.maps.LatLng(locations[0][1], locations[0][2]),
+                                                        mapTypeId: google.maps.MapTypeId.ROADMAP
                                                     });
 
-                                                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                                                        return function() {
-                                                        infowindow.setContent(locations[i][0]);
-                                                        infowindow.open(map, marker);
-                                                        }
-                                                    })(marker, i));
-                                                }
-                                            }, 3000);
-                                        }
-                                        else{
-                                            $('#sendcloudId').find('.modal-body').html('');
-                                            $('#sendcloudId').find('.modal-body').html(data.error);
-                                        }
+                                                    var infowindow = new google.maps.InfoWindow();
+                                                    var marker, i;
+                                                    for (i = 0; i < locations.length; i++) {
+                                                        marker = new google.maps.Marker({
+                                                            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                                                            map: map
+                                                        });
 
-                                        /*
-                                         Set location
-                                        */
-                                        $('button[name="set_location"]').click(function(){
-                                            var loc_id = $(this).next('input[name="location"]').val()
-                                            if(loc_id){
-                                                ajax.jsonRpc('/set_location', 'call', {'location': parseInt(loc_id)}).then(function(data) {
-                                                    if(data.success == true)
-                                                    {
-                                                        $('#sendcloudId').find('button[name="close"]').trigger( "click" );
-                                                        $('.disp_location').text('');
-                                                        var address = data.name +', '+data.street+ ', '+data.city+' - '+data.zip+'.'
-                                                        $('.disp_location').text(address);
-                                                        $payButton.prop('disabled', false);
+                                                        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                                                            return function() {
+                                                            infowindow.setContent(locations[i][0]);
+                                                            infowindow.open(map, marker);
+                                                            }
+                                                        })(marker, i));
                                                     }
-                                                });
+                                                }, 3000);
                                             }
+                                            else{
+                                                $('#sendcloudId').find('.modal-body').html('');
+                                                $('#sendcloudId').find('.modal-body').html(data.error);
+                                            }
+
+                                            /*
+                                             Set location
+                                            */
+                                            $('button[name="set_location"]').click(function(){
+                                                var loc_id = $(this).next('input[name="location"]').val()
+                                                if(loc_id){
+                                                    ajax.jsonRpc('/set_location', 'call', {'location': parseInt(loc_id)}).then(function(data) {
+                                                        if(data.success == true)
+                                                        {
+                                                            $('#sendcloudId').find('button[name="close"]').trigger( "click" );
+                                                            $('.disp_location').text('');
+                                                            var address = data.name +', '+data.street+ ', '+data.city+' - '+data.zip+'.'
+                                                            $('.disp_location').text(address);
+                                                            $payButton.prop('disabled', false);
+                                                        }
+                                                    });
+                                                }
+                                            })
                                         })
-                                    })
+                                    });
+                                }
+                            });
+                        }
+                        else{
+                            var loc_id = $('input[name="location"]').val()
+                            if(loc_id){
+                                ajax.jsonRpc('/remove_location', 'call', {'location': parseInt(loc_id)}).then(function(data) {
+                                    if(data.success == true)
+                                    {
+                                        $('#sendcloudId').find('button[name="close"]').trigger( "click" );
+                                        $('.disp_location').text('');
+                                        var address = data.name +', '+data.street+ ', '+data.city+' - '+data.zip+'.'
+                                        $('.disp_location').text(address);
+                                        $payButton.prop('disabled', false);
+                                    }
                                 });
                             }
-                        });
+                            $('.sendcloud_loc_js').remove();
+                        }
                     }
                     else{
                         var msg = '<p class="text-danger mt4">Something wrong!!!</p>'
