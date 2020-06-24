@@ -33,8 +33,7 @@ class DeliveryCarrier(models.Model):
     def sendcloud_order_request_data(self,picking):
         receipient_address = picking.partner_id
         picking_company_id = picking.picking_type_id.warehouse_id.partner_id
-        sendcloud_request_data={
-          "parcel": {
+        parcel = {
             "name":  "%s" % (receipient_address.name),
             "company_name": "%s" % (receipient_address.name),
             "address":"%s" % (picking.sale_id.sendcloud_shipping_location_id.street if picking.sale_id.sendcloud_shipping_location_id.street else receipient_address.street or ""),
@@ -51,10 +50,14 @@ class DeliveryCarrier(models.Model):
             },
             "weight": "%s"%(picking.shipping_weight),
             "order_number": "%s"%(picking.id),
-            "insured_value": 0.0,
-            "to_service_point" : picking.sale_id.sendcloud_shipping_location_id.send_cloud_location_id or ""
+            "insured_value": 0.0
+            # "to_service_point" : picking.sale_id.sendcloud_shipping_location_id.send_cloud_location_id or ""
           }
-        }
+        if self.location_required:
+            parcel.update({"to_service_point" : picking.sale_id.sendcloud_shipping_location_id.send_cloud_location_id})
+            sendcloud_request_data={"parcel": parcel}
+        else:
+       	    sendcloud_request_data={"parcel": parcel}
         return sendcloud_request_data
 
     
