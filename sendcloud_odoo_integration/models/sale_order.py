@@ -8,7 +8,7 @@ class SaleOrder(models.Model):
 
     sendcloud_shipping_location_ids = fields.One2many("sendcloud.locations", "sale_order_id", string="Sendcloud Locations")
     sendcloud_shipping_location_id = fields.Many2one("sendcloud.locations", string="Sendcloud Locations",help="Sendcloud locations",copy=False)
-
+    sendcloud_service_id = fields.Many2one('sendcloud.shipping.services', string="Sendcloud Service")
     
     def get_locations(self):
         order = self

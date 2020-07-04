@@ -23,6 +23,7 @@
                         </field>
                         <group>
                             <field name="sendcloud_shipping_location_id" readonly="1"/>
+                            <field name="sendcloud_service_id" />
                             <button type='object' class="fa fa-arrow-right oe_link" name="get_locations"
                                     string="Get Locations"/>
 

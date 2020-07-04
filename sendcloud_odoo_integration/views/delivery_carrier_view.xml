@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+    <record id="sendcloud_price_rule_configuration" model="ir.ui.view">
+        <field name="name">delivery.price.rule</field>
+        <field name="model">delivery.price.rule</field>
+        <field name="inherit_id" ref="delivery.view_delivery_price_rule_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[last()]" position="after">
+                <group>
+                    <field name="sendcloud_service_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
     <record id="sendcloud_deleivery_method_configuration" model="ir.ui.view">
         <field name="name">delivery.carrier.configuration</field>
         <field name="model">delivery.carrier</field>
@@ -33,7 +47,6 @@
                         <group>
                             <field name="sendcloud_service_id"
                                    attrs="{'required': [('delivery_type', '=', 'sendcloud')]}"/>
-                            <field name="location_required"></field>
                         </group>
                     </group>
                 </page>
