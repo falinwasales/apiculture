@@ -1,10 +1,15 @@
+import time
 from requests import request
+import requests
 from odoo import models, fields, api, _
 import logging
 import simplejson as json
-import base64
+from requests.auth import HTTPBasicAuth
 from odoo.tools.safe_eval import safe_eval
 from odoo.exceptions import UserError, ValidationError
+import binascii
+import base64
+import requests
 
 _logger = logging.getLogger(__name__)
 
@@ -12,8 +17,8 @@ class DeliveryCarrier(models.Model):
     _inherit = "delivery.carrier"
 
     delivery_type = fields.Selection(selection_add=[("sendcloud", "Sendcloud")])
-
     sendcloud_service_id = fields.Many2one('sendcloud.shipping.services',string="Sendcloud Service")
+    location_required = fields.Boolean('Location Required')
 
     delivery_type_sendcloud = fields.Selection(
         [('fixed', 'Sendcloud Fixed Price'), ('base_on_rule', 'Sendcloud Based on Rules')],
@@ -53,10 +58,14 @@ class DeliveryCarrier(models.Model):
             },
             "weight": "%s"%(picking.shipping_weight),
             "order_number": "%s"%(picking.id),
-            "insured_value": 0.0,
-            "to_service_point" : picking.sale_id.sendcloud_shipping_location_id.send_cloud_location_id or ""
+            "insured_value": 0.0
+            # "to_service_point" : picking.sale_id.sendcloud_shipping_location_id.send_cloud_location_id or ""
           }
-        }
+        if self.location_required:
+            parcel.update({"to_service_point" : picking.sale_id.sendcloud_shipping_location_id.send_cloud_location_id})
+            sendcloud_request_data={"parcel": parcel}
+        else:
+       	    sendcloud_request_data={"parcel": parcel}
         return sendcloud_request_data
 
     

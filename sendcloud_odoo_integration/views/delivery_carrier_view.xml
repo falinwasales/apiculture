@@ -47,6 +47,7 @@
                         <group>
                             <field name="sendcloud_service_id"
                                    attrs="{'required': [('delivery_type', '=', 'sendcloud')]}"/>
+                            <field name="location_required"></field>
                         </group>
                     </group>
                 </page>
