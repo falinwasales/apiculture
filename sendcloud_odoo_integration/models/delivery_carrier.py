@@ -24,14 +24,14 @@ class DeliveryCarrier(models.Model):
         [('fixed', 'Sendcloud Fixed Price'), ('base_on_rule', 'Sendcloud Based on Rules')],
         string='Sendcloud Pricing',
         default='fixed')
-    
+
     def sendcloud_rate_shipment(self, order):
         if self.delivery_type_sendcloud == 'fixed':
             return self.fixed_rate_shipment(order)
         if self.delivery_type_sendcloud == 'base_on_rule':
             self._get_available_service(order)
             return self.base_on_rule_rate_shipment(order)
-    
+
     def sendcloud_order_request_data(self,picking):
         receipient_address = picking.partner_id
         picking_company_id = picking.picking_type_id.warehouse_id.partner_id
@@ -40,8 +40,8 @@ class DeliveryCarrier(models.Model):
             sendcloud_service_id = picking.sale_id.sendcloud_service_id.sendcloud_service_id or ""
         else:
             sendcloud_service_id = self.sendcloud_service_id and self.sendcloud_service_id.sendcloud_service_id or ""
-        sendcloud_request_data={
-          "parcel": {
+
+        parcel={
             "name":  "%s" % (receipient_address.name),
             "company_name": "%s" % (receipient_address.name),
             "address":"%s" % (picking.sale_id.sendcloud_shipping_location_id.street if picking.sale_id.sendcloud_shipping_location_id.street else receipient_address.street or ""),
@@ -68,7 +68,7 @@ class DeliveryCarrier(models.Model):
        	    sendcloud_request_data={"parcel": parcel}
         return sendcloud_request_data
 
-    
+
     def sendcloud_api_calling_function(self, api_url, request_data):
         data = "%s:%s" % (self.company_id and self.company_id.sendcloud_api_key, self.company_id and self.company_id.sendcloud_api_secret)
         encode_data = base64.b64encode(data.encode("utf-8"))
