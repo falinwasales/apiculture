@@ -38,7 +38,7 @@
                     <!--&lt;!&ndash; Modal content&ndash;&gt;-->
                     <div class="modal-content">
                         <div class="modal-header">
-                            <span class="modal-title pull-left">Sendcloud Location</span>
+                            <span class="modal-title pull-left">Choisir un point de retrait</span>
                             <button type="button" class="close pull-right"
                                     data-dismiss="modal">x
                             </button>
