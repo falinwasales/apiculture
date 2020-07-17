@@ -37,7 +37,8 @@ class WebsiteSale(http.Controller):
                 order.carrier_id.company_id.sendcloud_api_secret)
             encode_data = base64.b64encode(data.encode("utf-8"))
             authrization_data = "Basic %s" % (encode_data.decode("utf-8"))
-            url = "https://servicepoints.sendcloud.sc/api/v2/servicepoints/?country=%s&postalCode=%s&language=en&city=%s" % (
+            carrier_code = order.carrier_id.sendcloud_service_id.sendcloud_carrier_name if order.carrier_id.sendcloud_service_id.sendcloud_carrier_name else "mondial_relay"
+            url = "https://servicepoints.sendcloud.sc/api/v2/servicepoints/?carrier=%s&country=%s&postalCode=%s&language=en&city=%s" % (carrier_code,
                 recipient_address.country_id and recipient_address.country_id.code or "",
                 recipient_address.zip, recipient_address.city)
             headers = {"Authorization":"%s" % authrization_data}

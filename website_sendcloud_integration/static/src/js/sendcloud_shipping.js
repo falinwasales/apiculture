@@ -137,7 +137,7 @@ odoo.define('website_sendcloud_integration.checkout', function (require) {
                     {
                         var delivery_li = $('#delivery_method').find('#delivery_'+ delivery_id +'').parents('.list-group-item')
                         var location_r = delivery_li.find("#location_required").val()
-                        msg = "<p id='loc_warning' class='text-danger'>Delivery location is required.</p>"
+                        msg = "<p id='loc_warning' class='text-danger'>Le lieu de livraison est obligatoire.</p>"
                         if(location_r == 'True' && $('.disp_location').text() == ""){
                             $payButton.prop('disabled', true);
                             $('#loc_warning').remove()
