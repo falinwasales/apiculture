@@ -23,7 +23,7 @@
             <p class="mt16">
                 <button type="button" class="btn btn-primary"
                         name="get_location" data-toggle="modal" data-target="#sendcloudId">
-                    <span class="mr4">Find Locations</span>
+                    <span class="mr4">Choisir un point de retrait</span>
                     <i class="fa fa-arrow-right "></i>
                 </button>
                 <p class="disp_location mt16 mb0"></p>
