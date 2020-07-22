@@ -97,7 +97,7 @@ class WebsiteSale(http.Controller):
     def set_location(self, location=False, **post):
         location_id = request.env['sendcloud.locations'].browse(location)
         if location_id and location_id.id:
-            location_id.sale_order_id.sendcloud_shipping_location_id = location_id.id
+            location_id.sale_order_id.sudo().write({'sendcloud_shipping_location_id':location_id.id})
             return {'success': True, 'name': location_id.name, 'city': location_id.city,
                     'zip': location_id.zip, 'street': location_id.street}
 
