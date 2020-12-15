@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+,,,,,,,
+access_order_status_result_user,order.status.result,pob.model_order_status_result,bridge_skeleton.group_connector_user,1,1,1,0
+
+
+
+,,,,,,,
+access_order_status_result_manager,order.status.result,pob.model_order_status_result,bridge_skeleton.group_connector_manager,1,1,1,1
+
+
+,,,,,,,
+access_order_status_result_no_body,order.status.result,pob.model_order_status_result,,1,1,0,0

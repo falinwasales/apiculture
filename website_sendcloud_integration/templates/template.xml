@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="inherited_payment_delivery"
+              inherit_id="website_sale_delivery.payment_delivery">
+        <xpath expr="//div[@id='delivery_method']" position="inside">
+            <input id="sale_order_js" t-if="order" name="sale_order"
+                   type="hidden" t-att-value="order.id"/>
+        </xpath>
+        <xpath expr="//div[@id='delivery_method']//li" position="inside">
+            <t t-if="delivery and delivery.location_required">
+                <input id="location_required" name="location_required"
+                       t-att-value="delivery.location_required"
+                       type="hidden"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="sendcloud_shipping_location"
+              name="Sendcloud Shipping Location">
+        <div class="form-group col-lg-12 div_location sendcloud_loc_js">
+            <input id="sendcloud_location" name="sendcloud_location"
+                   type="hidden"/>
+            <p class="mt16">
+                <button type="button" class="btn btn-primary"
+                        name="get_location" data-toggle="modal" data-target="#sendcloudId">
+                    <span class="mr4">Choisir un point de retrait</span>
+                    <i class="fa fa-arrow-right "></i>
+                </button>
+                <p class="disp_location mt16 mb0"></p>
+            </p>
+
+            <span class="set_address"></span>
+            <!--&lt;!&ndash; Modal &ndash;&gt;-->
+            <div class="modal fade" id="sendcloudId" tabindex="-1" open="open"
+                 style="z-index: 1045;"
+                 role="dialog">
+                <div class="modal-dialog">
+                    <!--&lt;!&ndash; Modal content&ndash;&gt;-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span class="modal-title pull-left">Choisir un point de retrait</span>
+                            <button type="button" class="close pull-right"
+                                    data-dismiss="modal">x
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="loader"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" name="close" class="btn btn-default"
+                                    data-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Json Data Call -->
+    <template id="sendcloud_location_details" name="Location Details">
+        <div style="width:33%;float:left">
+            <t t-foreach="locations" t-as="location">
+                <tr t-if="location">
+                    <button type="button" class="btn item set_location" name="set_location"
+                            style="padding: 5px;border: 1px solid #ccc;cursor: pointer;width: 100%;text-align: left;background: transparent;">
+                        <p class="text-primary mb0"
+                           style="font-size: 13px;font-weight: bold;">
+                            <t t-esc="location.name"/>
+                            <br/>
+                        </p>
+                        <small t-esc="location.street"/>
+                        <div class=""><small t-esc="location.city"/>,
+                            <small t-esc="location.zip"/>
+                        </div>
+                    </button>
+                    <input type="hidden" name="location" t-att-value="location.id"></input>
+                </tr>
+            </t>
+        </div>
+        <div style="width:65%;float:right">
+            <script t-att-src="'https://maps.googleapis.com/maps/api/js?file=api&amp;v=2&amp;key=%s&amp;' %request.env['ir.config_parameter'].sudo().get_param('google_maps_api_key')"/>
+            <div id="map" style="width: 100%;min-height: 350px;"/>
+        </div>
+    </template>
+</odoo>
